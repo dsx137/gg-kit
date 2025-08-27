@@ -32,7 +32,7 @@ func NewReusePoolWithParentCtx[T any](parentCtx context.Context, factory func() 
 }
 
 func NewReusePool[T any](factory func() (*T, error), validator func(*T) bool, closer func(*T) error) (*ReusePool[T], error) {
-	return NewReusePoolWithParentCtx[T](context.Background(), factory, validator, closer)
+	return NewReusePoolWithParentCtx(context.Background(), factory, validator, closer)
 }
 
 func (p *ReusePool[T]) Get() (*T, error) {
