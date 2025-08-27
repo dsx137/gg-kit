@@ -16,10 +16,15 @@ func ConsumeWithCtx[T any](ctx context.Context, ch <-chan T, handler func(T) boo
 }
 
 // concurrent
-func NewAtomic[T any]() *concurrent.Atomic[T]         { return concurrent.NewAtomic[T]() }
+type Atomic[T any] = concurrent.Atomic[T]
+type Pool[T any] = concurrent.Pool[T]
+type ReentrantLock = concurrent.ReentrantLock
+type ReentrantRWLock = concurrent.ReentrantRWLock
+
+func NewAtomic[T any]() *Atomic[T]                    { return concurrent.NewAtomic[T]() }
 func NewPool[T any](new func() T) *concurrent.Pool[T] { return concurrent.NewPool(new) }
-func NewReentrantLock() *concurrent.ReentrantLock     { return concurrent.NewReentrantLock() }
-func NewReentrantRWLock() *concurrent.ReentrantRWLock { return concurrent.NewReentrantRWLock() }
+func NewReentrantLock() *ReentrantLock                { return concurrent.NewReentrantLock() }
+func NewReentrantRWLock() *ReentrantRWLock            { return concurrent.NewReentrantRWLock() }
 
 // lang
 
