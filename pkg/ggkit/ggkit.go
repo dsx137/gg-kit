@@ -10,7 +10,6 @@ import (
 )
 
 // channel
-
 func Consume[T any](ch <-chan T, handler func(T) bool) { channel.Consume(ch, handler) }
 func ConsumeWithCtx[T any](ctx context.Context, ch <-chan T, handler func(T) bool) {
 	channel.ConsumeWithCtx(ctx, ch, handler)
@@ -35,12 +34,10 @@ func NewReusePool[T any](factory func() (*T, error), validator func(*T) bool, cl
 }
 
 // lang
-
 func GetGoroutineId() int { return lang.GetGoroutineId() }
 func Useless(v any)       { lang.Useless(v) }
 
 // structure
-
 type List[T any] = structure.List[T]
 type Queue[T any] = structure.Queue[T]
 
