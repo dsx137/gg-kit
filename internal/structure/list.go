@@ -70,5 +70,5 @@ func (l *List[T]) PushFrontList(other *List[T]) {
 	l.l.PushFrontList(other.l)
 }
 func (l *List[T]) Remove(e *Element[T]) T {
-	return e.e.Value.(T)
+	return l.l.Remove(e.e).(T)
 }
