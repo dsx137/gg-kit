@@ -16,7 +16,7 @@ func (q *Queue[T]) Enqueue(v T) {
 
 func (q *Queue[T]) Dequeue() (v T, ok bool) {
 	front := q.l.Front()
-	if front == nil {
+	if front.e == nil {
 		var zero T
 		return zero, false
 	}
