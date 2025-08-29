@@ -8,7 +8,6 @@ import (
 	"github.com/dsx137/gg-kit/internal/lang"
 	"github.com/dsx137/gg-kit/internal/structure"
 	"github.com/dsx137/gg-kit/internal/util"
-
 )
 
 // channel
@@ -47,6 +46,9 @@ func NewList[T any]() *List[T]   { return structure.NewList[T]() }
 func NewQueue[T any]() *Queue[T] { return structure.NewQueue[T]() }
 
 // util
+func GenerateReadableKey(length int, groupSize int) (string, error) {
+	return util.GenerateReadableKey(length, groupSize)
+}
 func GenerateRandomBytes(n int) ([]byte, error)    { return util.GenerateRandomBytes(n) }
 func GenerateBase64Key(length int) (string, error) { return util.GenerateBase64Key(length) }
 func GenerateHexKey(length int) (string, error)    { return util.GenerateHexKey(length) }
