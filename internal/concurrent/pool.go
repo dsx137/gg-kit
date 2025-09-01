@@ -12,10 +12,5 @@ func NewPool[T any](new func() T) *Pool[T] {
 	}
 }
 
-func (p *Pool[T]) Get() T {
-	return p.Pool.Get().(T)
-}
-
-func (p *Pool[T]) Put(x T) {
-	p.Pool.Put(x)
-}
+func (p *Pool[T]) Get() T  { return p.Pool.Get().(T) }
+func (p *Pool[T]) Put(x T) { p.Pool.Put(x) }

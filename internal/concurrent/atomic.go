@@ -16,18 +16,7 @@ func NewAtomicWithValue[T any](val T) *Atomic[T] {
 	return ret
 }
 
-func (a *Atomic[T]) Store(val T) {
-	a.Value.Store(val)
-}
-
-func (a *Atomic[T]) Load() T {
-	return a.Value.Load().(T)
-}
-
-func (a *Atomic[T]) Swap(val T) T {
-	return a.Value.Swap(val).(T)
-}
-
-func (a *Atomic[T]) CompareAndSwap(old, new T) bool {
-	return a.Value.CompareAndSwap(old, new)
-}
+func (a *Atomic[T]) Store(val T)                    { a.Value.Store(val) }
+func (a *Atomic[T]) Load() T                        { return a.Value.Load().(T) }
+func (a *Atomic[T]) Swap(val T) T                   { return a.Value.Swap(val).(T) }
+func (a *Atomic[T]) CompareAndSwap(old, new T) bool { return a.Value.CompareAndSwap(old, new) }
