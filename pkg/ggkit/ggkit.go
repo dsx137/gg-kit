@@ -35,12 +35,10 @@ func NewReusePool[T any](factory func() (*T, error), validator func(*T) bool, cl
 }
 
 // lang
-func BindAlloc[T any](f func(x *T)) *T                { return lang.BindAlloc(f) }
-func Bind[T any](f func(x **T)) **T                   { return lang.Bind(f) }
-func BindAllocR[T any, R any](f func(x *T) R) (*T, R) { return lang.BindAllocR(f) }
-func BindR[T any, R any](f func(x **T) R) (*T, R)     { return lang.BindR(f) }
-func GetGoroutineId() int                             { return lang.GetGoroutineId() }
-func Useless(v any)                                   { lang.Useless(v) }
+func Bind[T any](f func(x any)) *T                { return lang.Bind[T](f) }
+func BindR[T any, R any](f func(x any) R) (*T, R) { return lang.BindR[T](f) }
+func GetGoroutineId() int                         { return lang.GetGoroutineId() }
+func Useless(v any)                               { lang.Useless(v) }
 
 // structure
 type List[T any] = structure.List[T]
