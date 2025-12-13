@@ -1,4 +1,4 @@
-package concurrent
+package generic
 
 import "sync/atomic"
 

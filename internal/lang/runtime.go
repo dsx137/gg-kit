@@ -7,6 +7,7 @@ import (
 	"strings"
 )
 
+// EXPERIMENT: THIS IS A HACKY WAY TO GET THE CURRENT GOROUTINE ID
 func GetGoroutineId() int {
 	defer func() {
 		if err := recover(); err != nil {

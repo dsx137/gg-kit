@@ -1,12 +1,14 @@
 package structure
 
+import "github.com/dsx137/gg-kit/internal/generic"
+
 type Queue[T any] struct {
-	l *List[T]
+	l *generic.List[T]
 }
 
 func NewQueue[T any]() *Queue[T] {
 	return &Queue[T]{
-		l: NewList[T](),
+		l: generic.NewList[T](),
 	}
 }
 
@@ -16,7 +18,7 @@ func (q *Queue[T]) Enqueue(v T) {
 
 func (q *Queue[T]) Dequeue() (v T, ok bool) {
 	front := q.l.Front()
-	if front.e == nil {
+	if front == nil {
 		var zero T
 		return zero, false
 	}
