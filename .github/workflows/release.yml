@@ -1,0 +1,46 @@
+name: release
+
+on:
+    push:
+        branches:
+            - main
+    pull_request:
+        branches:
+            - main
+
+jobs:
+    publish:
+        concurrency:
+            group: release
+            cancel-in-progress: true
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v3
+
+            - name: Set up Go
+              uses: actions/setup-go@v5
+              with:
+                  go-version: stable
+
+            - name: Generate Changelog
+              uses: dsx137/generate-changelog@main
+              id: get_changelog
+              with:
+                  branch: "main"
+                  include: "^v\\d+\\.\\d+\\.\\d+$"
+
+            - name: Extract Version
+              id: get_version
+              run: echo "version=$(<VERSION)" >> $GITHUB_OUTPUT
+
+            - name: Create GitHub Release
+              uses: andelf/nightly-release@main
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                  tag_name: ${{ steps.get_version.outputs.version }}
+                  name: ${{ steps.get_version.outputs.version }}
+                  prerelease: false
+                  body: ${{ steps.get_changelog.outputs.changelog }}

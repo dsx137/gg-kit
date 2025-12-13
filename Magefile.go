@@ -7,7 +7,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/magefile/mage/sh" // mage install
+	"github.com/magefile/mage/sh"
 )
 
 var Default = Gen
