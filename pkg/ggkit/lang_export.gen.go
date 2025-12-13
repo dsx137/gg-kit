@@ -4,24 +4,32 @@ package ggkit
 
 import lang "github.com/dsx137/gg-kit/internal/lang"
 
-func Bind[T any](f func(x any)) *T {
-	return lang.Bind[T](f)
+func Bind[T any](f func(x *T)) *T {
+	return lang.Bind(f)
 }
 
-func BindPtr[T any](f func(x any)) *T {
-	return lang.BindPtr[T](f)
+func BindPtr[T any](f func(x **T)) *T {
+	return lang.BindPtr(f)
 }
 
-func BindPtrR[T any, R any](f func(x any) R) (*T, R) {
-	return lang.BindPtrR[T, R](f)
+func BindPtrR[T any, R any](f func(x **T) R) (*T, R) {
+	return lang.BindPtrR(f)
 }
 
-func BindR[T any, R any](f func(x any) R) (*T, R) {
-	return lang.BindR[T, R](f)
+func BindR[T any, R any](f func(x *T) R) (*T, R) {
+	return lang.BindR(f)
 }
 
 func GetGoroutineId() int {
 	return lang.GetGoroutineId()
+}
+
+func ShouldBindTo[T any](f func(x *T) error) (*T, error) {
+	return lang.ShouldBindTo(f)
+}
+
+func UnmarshalTo[T any, D any](f func(_p0 D, _p1 any) error, data D) (*T, error) {
+	return lang.UnmarshalTo[T, D](f, data)
 }
 
 func Useless(v any) {

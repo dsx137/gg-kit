@@ -3,18 +3,18 @@ package generic
 import "container/list"
 
 type Element[T any] struct {
-	le *list.Element
+	e *list.Element
 }
 
 func (e *Element[T]) Value() T {
-	return e.le.Value.(T)
+	return e.e.Value.(T)
 }
 
 func (e *Element[T]) Next() *Element[T] {
-	return &Element[T]{le: e.le.Next()}
+	return &Element[T]{e: e.e.Next()}
 }
 func (e *Element[T]) Prev() *Element[T] {
-	return &Element[T]{le: e.le.Prev()}
+	return &Element[T]{e: e.e.Prev()}
 }
 
 type List[T any] struct {
@@ -32,7 +32,7 @@ func (l *List[T]) Back() *Element[T] {
 	if le == nil {
 		return nil
 	}
-	return &Element[T]{le: le}
+	return &Element[T]{e: le}
 }
 
 func (l *List[T]) Front() *Element[T] {
@@ -40,7 +40,7 @@ func (l *List[T]) Front() *Element[T] {
 	if le == nil {
 		return nil
 	}
-	return &Element[T]{le: le}
+	return &Element[T]{e: le}
 }
 
 func (l *List[T]) Init() *List[T] {
@@ -49,11 +49,11 @@ func (l *List[T]) Init() *List[T] {
 }
 
 func (l *List[T]) InsertAfter(v T, mark *Element[T]) *Element[T] {
-	return &Element[T]{le: l.l.InsertAfter(v, mark.le)}
+	return &Element[T]{e: l.l.InsertAfter(v, mark.e)}
 }
 
 func (l *List[T]) InsertBefore(v T, mark *Element[T]) *Element[T] {
-	return &Element[T]{le: l.l.InsertBefore(v, mark.le)}
+	return &Element[T]{e: l.l.InsertBefore(v, mark.e)}
 }
 
 func (l *List[T]) Len() int {
@@ -61,23 +61,23 @@ func (l *List[T]) Len() int {
 }
 
 func (l *List[T]) MoveAfter(e *Element[T], mark *Element[T]) {
-	l.l.MoveAfter(e.le, mark.le)
+	l.l.MoveAfter(e.e, mark.e)
 }
 
 func (l *List[T]) MoveBefore(e *Element[T], mark *Element[T]) {
-	l.l.MoveBefore(e.le, mark.le)
+	l.l.MoveBefore(e.e, mark.e)
 }
 
 func (l *List[T]) MoveToBack(e *Element[T]) {
-	l.l.MoveToBack(e.le)
+	l.l.MoveToBack(e.e)
 }
 
 func (l *List[T]) MoveToFront(e *Element[T]) {
-	l.l.MoveToFront(e.le)
+	l.l.MoveToFront(e.e)
 }
 
 func (l *List[T]) PushBack(v T) *Element[T] {
-	return &Element[T]{le: l.l.PushBack(v)}
+	return &Element[T]{e: l.l.PushBack(v)}
 }
 
 func (l *List[T]) PushBackList(other *List[T]) {
@@ -85,7 +85,7 @@ func (l *List[T]) PushBackList(other *List[T]) {
 }
 
 func (l *List[T]) PushFront(v T) *Element[T] {
-	return &Element[T]{le: l.l.PushFront(v)}
+	return &Element[T]{e: l.l.PushFront(v)}
 }
 
 func (l *List[T]) PushFrontList(other *List[T]) {
@@ -97,7 +97,7 @@ func (l *List[T]) Remove(e *Element[T]) T {
 		var zero T
 		return zero
 	}
-	return l.l.Remove(e.le).(T)
+	return l.l.Remove(e.e).(T)
 }
 
 // --------------- EXPAND ----------------

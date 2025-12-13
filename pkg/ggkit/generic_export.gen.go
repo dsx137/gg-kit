@@ -7,7 +7,8 @@ import generic "github.com/dsx137/gg-kit/internal/generic"
 type Atomic[T any] = generic.Atomic[T]
 type Element[T any] = generic.Element[T]
 type List[T any] = generic.List[T]
-type Pool[T any] = generic.Pool[T]
+type SyncMap[K comparable, V any] = generic.SyncMap[K, V]
+type SyncPool[T any] = generic.SyncPool[T]
 
 func NewAtomic[T any]() *Atomic[T] {
 	return generic.NewAtomic[T]()
@@ -21,6 +22,10 @@ func NewList[T any]() *List[T] {
 	return generic.NewList[T]()
 }
 
-func NewPool[T any](new func() T) *Pool[T] {
+func NewPool[T any](new func() T) *SyncPool[T] {
 	return generic.NewPool(new)
+}
+
+func NewSyncMap[K comparable, V any]() *SyncMap[K, V] {
+	return generic.NewSyncMap[K, V]()
 }
