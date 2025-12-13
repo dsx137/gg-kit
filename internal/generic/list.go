@@ -11,10 +11,18 @@ func (e *Element[T]) Value() T {
 }
 
 func (e *Element[T]) Next() *Element[T] {
-	return &Element[T]{e: e.e.Next()}
+	ee := e.e.Next()
+	if ee == nil {
+		return nil
+	}
+	return &Element[T]{e: ee}
 }
 func (e *Element[T]) Prev() *Element[T] {
-	return &Element[T]{e: e.e.Prev()}
+	ee := e.e.Prev()
+	if ee == nil {
+		return nil
+	}
+	return &Element[T]{e: ee}
 }
 
 type List[T any] struct {

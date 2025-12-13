@@ -1,7 +1,6 @@
 package concurrent
 
 import (
-	"context"
 	"sync"
 
 	"github.com/dsx137/gg-kit/internal/structure"
@@ -13,62 +12,38 @@ type ReusePool[T any] struct {
 	factory   func() (*T, error)
 	validator func(*T) bool
 	closer    func(*T) error
-	ctx       context.Context
-	ctxCancel context.CancelFunc
 }
 
-func NewReusePoolWithParentCtx[T any](parentCtx context.Context, factory func() (*T, error), validator func(*T) bool, closer func(*T) error) (*ReusePool[T], error) {
-	ctx, cancel := context.WithCancel(parentCtx)
+func NewReusePool[T any](factory func() (*T, error), validator func(*T) bool, closer func(*T) error) (*ReusePool[T], error) {
 	pool := &ReusePool[T]{
 		mu:        &sync.Mutex{},
 		resources: structure.NewQueue[*T](),
 		factory:   factory,
 		validator: validator,
 		closer:    closer,
-		ctx:       ctx,
-		ctxCancel: cancel,
 	}
 	return pool, nil
 }
 
-func NewReusePool[T any](factory func() (*T, error), validator func(*T) bool, closer func(*T) error) (*ReusePool[T], error) {
-	return NewReusePoolWithParentCtx(context.Background(), factory, validator, closer)
-}
-
 func (p *ReusePool[T]) Get() (*T, error) {
-	if p.ctx.Err() != nil {
-		return nil, p.ctx.Err()
-	}
-
-	var (
-		res *T
-		err error
-	)
-
 	for {
 		p.mu.Lock()
-		if p.resources.Len() <= 0 {
-			p.mu.Unlock()
-			break
-		}
 		e, ok := p.resources.Dequeue()
 		p.mu.Unlock()
 		if !ok {
-			break
+			if p.factory != nil {
+				return p.factory()
+			}
+			return nil, nil
 		}
-		if p.validator(e) {
-			res = e
-			break
+		if p.validator == nil || p.validator(e) {
+			return e, nil
 		}
-		if err := p.closer(e); err != nil {
-			return nil, err
+		if p.closer == nil {
+			continue
 		}
+		_ = p.closer(e)
 	}
-	if res == nil {
-		res, err = p.factory()
-	}
-
-	return res, err
 }
 
 func (p *ReusePool[T]) Put(res *T) error {
@@ -76,8 +51,11 @@ func (p *ReusePool[T]) Put(res *T) error {
 		return nil
 	}
 
-	if p.ctx.Err() != nil || !p.validator(res) {
-		return p.closer(res)
+	if p.validator != nil && !p.validator(res) {
+		if p.closer != nil {
+			_ = p.closer(res)
+		}
+		return nil
 	}
 
 	p.mu.Lock()
@@ -86,11 +64,14 @@ func (p *ReusePool[T]) Put(res *T) error {
 	return nil
 }
 
-func (p *ReusePool[T]) Close() error {
-	p.ctxCancel()
-
+func (p *ReusePool[T]) Clear() error {
 	p.mu.Lock()
 	defer p.mu.Unlock()
+
+	if p.closer == nil {
+		p.resources = structure.NewQueue[*T]()
+		return nil
+	}
 
 	var firstErr error
 	for {
@@ -103,8 +84,4 @@ func (p *ReusePool[T]) Close() error {
 		}
 	}
 	return firstErr
-}
-
-func (p *ReusePool[T]) IsClosed() bool {
-	return p.ctx.Err() != nil
 }
