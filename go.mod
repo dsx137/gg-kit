@@ -1,6 +1,6 @@
 module github.com/dsx137/gg-kit
 
-go 1.25.0
+go 1.25.5
 
 require (
 	github.com/magefile/mage v1.15.0
