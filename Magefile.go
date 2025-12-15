@@ -24,7 +24,7 @@ func Gen() error {
 		"go", "run", "./cmd/gen_export",
 		"-module", modulePath,
 		"-out", outputDir,
-		"-pkg", "internal/*",
+		"-srcPkg", "internal/*",
 	); err != nil {
 		return err
 	}

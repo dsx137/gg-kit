@@ -3,7 +3,6 @@
 package ggkit
 
 import (
-	"context"
 	"sync"
 
 	concurrent "github.com/dsx137/gg-kit/internal/concurrent"
@@ -13,10 +12,6 @@ type ReusePool[T any] = concurrent.ReusePool[T]
 
 func NewReusePool[T any](factory func() (*T, error), validator func(_p0 *T) bool, closer func(_p0 *T) error) (*ReusePool[T], error) {
 	return concurrent.NewReusePool(factory, validator, closer)
-}
-
-func NewReusePoolWithParentCtx[T any](parentCtx context.Context, factory func() (*T, error), validator func(_p0 *T) bool, closer func(_p0 *T) error) (*ReusePool[T], error) {
-	return concurrent.NewReusePoolWithParentCtx(parentCtx, factory, validator, closer)
 }
 
 func WithLock(locker sync.Locker, f func()) {
