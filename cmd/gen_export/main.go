@@ -12,10 +12,6 @@ import (
 	"golang.org/x/tools/imports"
 )
 
-func GenExportCmdMain() {
-	main()
-}
-
 func main() {
 	// 定义命令行参数
 	mod := flag.String("module", "", "module path, e.g. github.com/dsx137/gg-kit")
