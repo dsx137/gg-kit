@@ -6,7 +6,7 @@ type SyncPool[T any] struct {
 	p *sync.Pool
 }
 
-func NewPool[T any](new func() T) *SyncPool[T] {
+func NewSyncPool[T any](new func() T) *SyncPool[T] {
 	return &SyncPool[T]{
 		p: &sync.Pool{New: func() any { return new() }},
 	}

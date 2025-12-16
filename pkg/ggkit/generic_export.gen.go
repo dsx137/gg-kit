@@ -22,10 +22,10 @@ func NewList[T any]() *List[T] {
 	return generic.NewList[T]()
 }
 
-func NewPool[T any](new func() T) *SyncPool[T] {
-	return generic.NewPool(new)
-}
-
 func NewSyncMap[K comparable, V any]() *SyncMap[K, V] {
 	return generic.NewSyncMap[K, V]()
+}
+
+func NewSyncPool[T any](new func() T) *SyncPool[T] {
+	return generic.NewSyncPool(new)
 }
