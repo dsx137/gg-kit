@@ -9,19 +9,20 @@ import (
 )
 
 type KeyedLocker[K comparable] = concurrent.KeyedLocker[K]
+type MapKeyedLocker[K comparable] = concurrent.MapKeyedLocker[K]
 type ReusePool[T any] = concurrent.ReusePool[T]
-type ShardedLocker[K comparable] = concurrent.ShardedLocker[K]
+type ShardedKeyedLocker[K comparable] = concurrent.ShardedKeyedLocker[K]
 
-func NewKeyedLocker[K comparable]() *KeyedLocker[K] {
-	return concurrent.NewKeyedLocker[K]()
+func NewMapKeyedLocker[K comparable]() *MapKeyedLocker[K] {
+	return concurrent.NewMapKeyedLocker[K]()
 }
 
 func NewReusePool[T any](factory func() (*T, error), validator func(_p0 *T) bool, closer func(_p0 *T) error) (*ReusePool[T], error) {
 	return concurrent.NewReusePool(factory, validator, closer)
 }
 
-func NewShardedLocker[K comparable](exp uint, hash func(_p0 K) uint64) *ShardedLocker[K] {
-	return concurrent.NewShardedLocker(exp, hash)
+func NewShardedKeyedLocker[K comparable](exp uint, hash func(_p0 K) uint64) *ShardedKeyedLocker[K] {
+	return concurrent.NewShardedKeyedLocker(exp, hash)
 }
 
 func WithLock(locker sync.Locker, f func()) {
