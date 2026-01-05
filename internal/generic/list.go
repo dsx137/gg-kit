@@ -1,6 +1,9 @@
 package generic
 
-import "container/list"
+import (
+	"container/list"
+	"iter"
+)
 
 type Element[T any] struct {
 	e *list.Element
@@ -110,7 +113,7 @@ func (l *List[T]) Remove(e *Element[T]) T {
 
 // --------------- EXPAND ----------------
 
-func (l *List[T]) All() func(yield func(T) bool) {
+func (l *List[T]) All() iter.Seq[T] {
 	return func(yield func(T) bool) {
 		for e := l.Front(); e != nil; e = e.Next() {
 			if !yield(e.Value()) {
@@ -120,7 +123,7 @@ func (l *List[T]) All() func(yield func(T) bool) {
 	}
 }
 
-func (l *List[T]) ReverseAll() func(yield func(T) bool) {
+func (l *List[T]) ReverseAll() iter.Seq[T] {
 	return func(yield func(T) bool) {
 		for e := l.Back(); e != nil; e = e.Prev() {
 			if !yield(e.Value()) {

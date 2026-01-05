@@ -1,6 +1,7 @@
 package generic
 
 import (
+	"iter"
 	"sync"
 )
 
@@ -72,7 +73,7 @@ func (m *SyncMap[K, V]) Range(f func(key K, value V) bool) {
 
 // --------------- EXPAND ----------------
 
-func (m *SyncMap[K, V]) All() func(yield func(K, V) bool) {
+func (m *SyncMap[K, V]) All() iter.Seq2[K, V] {
 	return func(yield func(K, V) bool) {
 		m.Range(func(k K, v V) bool {
 			return yield(k, v)
