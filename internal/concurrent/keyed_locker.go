@@ -4,9 +4,9 @@ import "sync"
 
 type KeyedLocker[K comparable] interface {
 	Lock(key K) func()
-	TryLock(key K) func()
+	TryLock(key K) (func(), bool)
 	RLock(key K) func()
-	TryRLock(key K) func()
+	TryRLock(key K) (func(), bool)
 	Locker(key K) sync.Locker
 	RLocker(key K) sync.Locker
 }

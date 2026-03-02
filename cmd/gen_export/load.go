@@ -2,6 +2,7 @@
 package main
 
 import (
+	"fmt"
 	"go/ast"
 	"go/types"
 	"log"
@@ -11,13 +12,13 @@ import (
 
 // load1 加载指定导入路径的包，并返回加载成功的包对象
 // 如果加载失败或者存在错误，则会调用 log.Fatalf 终止程序执行
-func load1(cfg *packages.Config, ip string) *packages.Package {
-	pkgs, err := packages.Load(cfg, ip)
+func load1(cfg *packages.Config, importPath string) *packages.Package {
+	pkgs, err := packages.Load(cfg, importPath)
 	if err != nil || len(pkgs) != 1 || pkgs[0].Types == nil {
-		log.Fatalf("load %s failed: %v", ip, err)
+		log.Fatalf("load %s failed: %v", importPath, err)
 	}
 	if packages.PrintErrors(pkgs) > 0 {
-		log.Fatalf("load %s has errors", ip)
+		log.Fatalf("load %s has errors", importPath)
 	}
 	p := pkgs[0]
 	if p.PkgPath == "" {
@@ -25,7 +26,7 @@ func load1(cfg *packages.Config, ip string) *packages.Package {
 		p.PkgPath = p.ID
 	}
 	if p.PkgPath == "" {
-		log.Fatalf("load %s: empty PkgPath and ID", ip)
+		log.Fatalf("load %s: empty PkgPath and ID", importPath)
 	}
 	return p
 }
@@ -45,7 +46,7 @@ func kind(obj types.Object) string {
 // 参数 cfg 是用于加载包的配置信息
 // 参数 mod 是模块的基本路径
 // 参数 relPkgs 是相对于模块基本路径的相关包列表
-func checkNameConflicts(cfg *packages.Config, mod string, relPkgs []string) {
+func checkNameConflicts(cfg *packages.Config, mod string, relPkgs []string) error {
 	seen := map[string]string{} // 导出名称 -> 包路径 的映射关系
 
 	for _, rel := range relPkgs {
@@ -64,9 +65,11 @@ func checkNameConflicts(cfg *packages.Config, mod string, relPkgs []string) {
 			}
 			// 若发现同名但来自不同包的对象，则报告命名冲突错误
 			if prev, ok := seen[name]; ok && prev != p.PkgPath {
-				log.Fatalf("name conflict: %s in %s and %s (use //%s)", name, prev, p.PkgPath, ignoreTag)
+				return fmt.Errorf("name conflict: %s in %s and %s (use //%s)", name, prev, p.PkgPath, ignoreTag)
 			}
 			seen[name] = p.PkgPath
 		}
 	}
+
+	return nil
 }

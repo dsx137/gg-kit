@@ -50,7 +50,9 @@ func main() {
 	}
 
 	// 1) 快速检查输入包之间的导出名称冲突
-	checkNameConflicts(cfg, *mod, srcPkgs)
+	if err := checkNameConflicts(cfg, *mod, srcPkgs); err != nil {
+		log.Fatal(err)
+	}
 
 	// 2) 为每个包生成代码
 	for _, rel := range srcPkgs {
